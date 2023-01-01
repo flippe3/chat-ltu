@@ -11,7 +11,7 @@ from sklearn.metrics import classification_report
 
 # Variables
 device = torch.device("cuda")
-batch_size = 8
+batch_size = 24
 epochs = 4
 learning_rate = 3e-5
 
@@ -23,10 +23,10 @@ tokenizer = GPT2Tokenizer.from_pretrained("EleutherAI/gpt-neo-125M")
 tokenizer.pad_token = tokenizer.eos_token
 
 # Load data
-# train_dataset = torch.load("train_gpt_2_tokenized_data.pickle")
-# test_dataset = torch.load("test_gpt_2_tokenized_data.pickle")
-train_dataset = torch.load("train_small.pickle")
-test_dataset = torch.load("test_small.pickle")
+train_dataset = torch.load("train_gpt_2_tokenized_data.pickle")
+test_dataset = torch.load("test_gpt_2_tokenized_data.pickle")
+# train_dataset = torch.load("train_small.pickle")
+# test_dataset = torch.load("test_small.pickle")
 
 
 train_dataloader = DataLoader(train_dataset, sampler = RandomSampler(train_dataset), batch_size=batch_size)

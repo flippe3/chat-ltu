@@ -1,1 +1,3 @@
 *.pickle
+pickles/
+reward_model_0*
