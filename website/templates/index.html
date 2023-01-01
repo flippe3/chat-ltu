@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>Open-Fnet Prompting</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Open-Fnet Prompting</h1>
+      <form action="/submit" method="POST">
+        <div class="form-group">
+            <label for="name">Prompt:</label>
+            <input type="text" class="form-control" id="prompt" name="prompt">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+        <div class="form-group">
+            <label for="output1">Output 1:</label>
+            <textarea class="form-control" id="output1" name="output1" rows="5" readonly>{{output1}}</textarea>
+          </div>
+          <div class="form-group">
+            <label for="output2">Output 2:</label>
+            <textarea class="form-control" id="output2" name="output2" rows="5" readonly>{{output2}}</textarea>
+          </div>
+          <div class="form-group">
+            <label for="output3">Output 3:</label>
+            <textarea class="form-control" id="output3" name="output3" rows="5" readonly>{{output3}}</textarea>
+          </div>
+          <div class="form-group">
+            <label for="output4">Output 4:</label>
+            <textarea class="form-control" id="output4" name="output4" rows="5" readonly>{{output4}}</textarea>
+        </div>
+        <form action="/rankings" method="POST">
+          <h2>Rankings:</h2>
+          <div class="form-group">
+              <label for="rating1">Output 1:</label>
+              <input type="range" class="form-control-range" id="rating1" name="rating1" min="1" max="10">
+          </div>
+          <div class="form-group">
+              <label for="rating2">Output 2:</label>
+              <input type="range" class="form-control-range" id="rating2" name="rating2" min="1" max="10">
+          </div>
+          <div class="form-group">
+              <label for="rating3">Output 3:</label>
+              <input type="range" class="form-control-range" id="rating3" name="rating3" min="1" max="10">
+          </div>
+          <div class="form-group">
+              <label for="rating4">Output 4:</label>
+              <input type="range" class="form-control-range" id="rating4" name="rating4" min="1" max="10">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+  </body>
+</html>
