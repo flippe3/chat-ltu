@@ -1,7 +1,7 @@
 import transformers
 from transformers import GPTNeoForSequenceClassification, GPT2Tokenizer, get_linear_schedule_with_warmup, Trainer, TrainingArguments, GPTNeoForCausalLM
 import torch
-from datasets import load_dataset, Dataset
+from datasets import load_dataset
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler, SequentialSampler
 from torch.optim import AdamW
 from torch.nn import BCELoss
@@ -46,7 +46,7 @@ config = PPOConfig(
 sent_kwargs = {
     "return_all_scores": True,
     "function_to_apply": "none",
-    "batch_size": config.forward_batch_size
+    "batch_size": 12
 }
 
 prompts = []
@@ -66,7 +66,7 @@ encoded_dict = tokenizer.batch_encode_plus(
 input_ids = encoded_dict['input_ids']
 attention_masks = encoded_dict['attention_mask']
 
-dataset = Dataset(input_ids, attention_masks)
+dataset = DataLoader(input_ids, batch_size=12)
 
 model = AutoModelForCausalLMWithValueHead.from_pretrained(config.model_name)
 ref_model = AutoModelForCausalLMWithValueHead.from_pretrained(config.model_name)
@@ -84,7 +84,6 @@ ppo_trainer = PPOTrainer(config, model, ref_model, tokenizer, dataset=dataset)
 for epoch, batch in tqdm(enumerate(ppo_trainer.dataloader)):
     query_tensors = batch['input_ids']
 
-    #### Get response from gpt2
     response_tensors = []
     for query in query_tensors:
         generation_kwargs["max_new_tokens"] = gen_len
@@ -92,14 +91,13 @@ for epoch, batch in tqdm(enumerate(ppo_trainer.dataloader)):
         response_tensors.append(response.squeeze()[-gen_len:])
     batch['response'] = [tokenizer.decode(r.squeeze()) for r in response_tensors]
 
-    #### Compute sentiment score
     # texts = [q + r for q,r in zip(batch['query'], batch['response'])]
     with torch.no_grad():
         pipe_outputs = reward_model(batch['response'], **sent_kwargs)
         rewards = pipe_outputs.logits
         print("Rewards:", rewards)
-        # rewards = [torch.tensor(output[1]["score"]) for output in pipe_outputs]
+        rewards = [torch.tensor(output[1]["score"]) for output in pipe_outputs]
 
-    #### Run PPO step 
-    # stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
-    # ppo_trainer.log_stats(stats, batch, rewards)
+    # Run PPO step 
+    stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
+    ppo_trainer.log_stats(stats, batch, rewards)
