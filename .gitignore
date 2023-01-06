@@ -1,3 +1,4 @@
 *.pickle
 pickles/
-reward_model_0*
+reward_model_*
+data/

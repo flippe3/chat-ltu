@@ -65,7 +65,6 @@ train_input_ids = encoded_dict['input_ids']
 train_attention_masks = encoded_dict['attention_mask']
 train_sentiments = torch.tensor(train_sentiment, dtype=torch.long)
 
-
 encoded_dict = tokenizer.batch_encode_plus(
                     test_texts,            
                     add_special_tokens = True,
